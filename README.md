@@ -25,7 +25,7 @@ You can instantiate a `CalendarPeriod` object by specifying a calendar period as
 You can also explicitly provide a date that you wish the calendar period to cover.
 
 	>>> date = datetime.date(2015, 1, 25)
-    >>> period = periodical.CalendarPeriod(date, period='weekly')
+    >>> period = periodical.CalendarPeriod(date=date, period='weekly')
     >>> period
     <CalendarPeriod '2015-W04'>
 
@@ -59,7 +59,7 @@ To return a new `CalendarPeriod` object that occurs immediately before or after 
 
 #### String representations
 
-CalendarPeriod objects use a unique representation that follows ISO 8601, with the exception of quartley intervals, which use a 'Q' prefix to the quarter. 
+CalendarPeriod objects use a unique representation that follows ISO 8601, with the exception of quarterley intervals, which use a 'Q' prefix to the quarter. 
 
 The following are all valid representations of CalendarPeriod objects:
 
@@ -89,11 +89,45 @@ The `isoformat()` method returns an ISO 8601 formatted date representing the sta
 
 ## Working with sequences of calendar periods
 
-### get_periods_descending(from, period, num_periods)
+The `periodical` module provides a few functions for returning sequences of calendar periods.  These allow you to easily return ranges such as "the last 12 months", or "all the weeks since the start of the year".
 
+### periods_ascending(from, period, num_periods)
 
+Returns a list of `CalendarPeriod` objects in chronological order, starting with a given date.
 
-This:
+##### Arguments:
+
+* `from` **(Optional)** - The starting date.  If not provided, this defaults to the current day.
+* `period` - A string representing the period length.
+* `num_periods` - An integer representing the number of `CalenderPeriod` objects to return.
+
+Example result from `periods_ascending(period='monthly', num_periods=3)` on Nov 25th, 2014.
+
+       Nov 25th 2014
+           |
+           V
+    +--------+--------+--------+
+    |  Nov.  |  Dec.  |  Jan.  |
+    |  2014  |  2014  |  2015  |
+    +--------+--------+--------+
+       [0] ---> [1] ---> [2]
+
+Example code:
+
+    >>> periodical.periods_ascending(period='monthly', num_periods=3)
+    [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>, <CalendarPeriod '2015-01'>]
+
+### periods_descending(from, period, num_periods)
+
+Returns a list of `CalendarPeriod` objects in reverse chronological order, starting with a given date.
+
+##### Arguments:
+
+* `from` **(Optional)** - The starting date.  If not provided, this defaults to the current day.
+* `period` - A string representing the period length.
+* `num_periods` - An integer representing the number of `CalenderPeriod` objects to return.
+
+Example result from `periods_descending(period='monthly', num_periods=3)` on Nov 25th, 2014.
 
                        Nov 25th 2014
                              |
@@ -105,28 +139,22 @@ This:
        [2] <--- [1] <--- [0]
 
 
-For example:
+Example code:
 
-    >>> periodical.get_periods_descending(period='monthly', num_periods=3)
+    >>> periodical.periods_descending(period='monthly', num_periods=3)
     [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-09'>]
 
-### get_periods_ascending(from, period, num_periods)
+### periods_between(from, until, period)
 
-       Nov 25th 2014
-           |
-           V
-    +--------+--------+--------+
-    |  Nov.  |  Dec.  |  Jan.  |
-    |  2014  |  2014  |  2015  |
-    +--------+--------+--------+
-       [0] ---> [1] ---> [2]
+Returns a list of `CalendarPeriod` objects in *either* chronological *or* reverse chronological order, starting and ending with a pair of given dates.
 
-For example:
+##### Arguments:
 
-    >>> periodical.get_periods_ascending(period='monthly', num_periods=3)
-    [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>, <CalendarPeriod '2015-01'>]
+* `from` **(Optional)** - The starting date.  If not provided, this defaults to the current day.
+* `until` **(Optional)** - The ending date.  If not provided, this defaults to the current day.
+* `period` - A string representing the period length.
 
-### get_periods_between(from, until, period)
+Example result from `periods_between(until=datetime.date(2014, 12, 31), period='monthly')` on Sept 23rd, 2014.
 
     Sept 23rd 2014                 Dec 31st 2014
           |                             |
@@ -137,9 +165,9 @@ For example:
     +--------+--------+--------+--------+
        [0] ---> [1] ---> [2] ---> [3]
 
-For example:
+Example code:
 
-    >>> periodical.get_periods_between(until=datetime.date(2014, 12, 31), period='monthly')
+    >>> periodical.periods_between(until=datetime.date(2014, 12, 31), period='monthly')
     [<CalendarPeriod '2014-09'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>]
 
 ---
