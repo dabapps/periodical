@@ -77,7 +77,7 @@ You can also instantiate a `CalendarPeriod` object using it's unique representat
     >>> period.end
     datetime.date(2014, 3, 31)
 
-The `isoformat()` method returns an ISO 8601 formatted date representing the start of the date range.  Note that quarterly representations cannot be expressed in ISO 8601, so will simply a monthly representation.
+The `isoformat()` method returns an ISO 8601 formatted date representing the start of the date range.  Note that quarterly representations cannot be expressed in ISO 8601, so will simply return the monthly representation of the start date.
 
     '2015'        # The 2015 year.
     '2013-04'     # The second quarter of 2013.
@@ -146,7 +146,7 @@ For example:
 
 ## Aggregation of values
 
-### fill(periods, date_value_pairs)
+### map(periods, date_value_pairs)
 
      {
          <CalendarPeriod '2014-09'>: [],

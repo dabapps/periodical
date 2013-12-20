@@ -110,7 +110,6 @@ class CalendarPeriod(object):
             return self._start.isoformat()[:7]
         else:
             # YYYY
-            assert self.period == 'yearly', 'self.period had invalid value'
             return str(self._start.year)
 
     def contains(self, date):
