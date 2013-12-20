@@ -4,6 +4,14 @@ The `periodical` Python module provides a convienient way of dealing with daily,
 
 These are particular useful for aggregating events at differing time granualities, for example when generating graphs or reports covering a given time span.
 
+You can install the `periodical` module using pip:
+
+    pip install periodical
+
+---
+
+## Basic usage
+
 ### The CalendarPeriod class
 
 The `CalendarPeriod` class is used to represent an interval of dates.
@@ -63,7 +71,7 @@ The following are all valid representations of CalendarPeriod objects:
 
 You can also instantiate a `CalendarPeriod` object using it's unique representation.
 
-    >>> period = CalendarPeriod("2014-Q1")
+    >>> period = periodical.CalendarPeriod("2014-Q1")
     >>> period.start
     datetime.date(2014, 1, 1)
     >>> period.end
@@ -76,6 +84,8 @@ The `isoformat()` method returns an ISO 8601 formatted date representing the sta
     '2014-03'     # March, 2014.
     '2013-W24'    # The 24th week of 2013.  (Numbering by ISO 8601 weeks)
     '2014-04-29'  # The 29th of April, 2014.
+
+---
 
 ## Working with sequences of calendar periods
 
@@ -97,7 +107,7 @@ This:
 
 For example:
 
-    >>> get_periods_descending(period='monthly', num_periods=3)
+    >>> periodical.get_periods_descending(period='monthly', num_periods=3)
     [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-09'>]
 
 ### get_periods_ascending(from, period, num_periods)
@@ -113,7 +123,7 @@ For example:
 
 For example:
 
-    >>> get_periods_ascending(period='monthly', num_periods=3)
+    >>> periodical.get_periods_ascending(period='monthly', num_periods=3)
     [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>, <CalendarPeriod '2015-01'>]
 
 ### get_periods_between(from, until, period)
@@ -129,8 +139,10 @@ For example:
 
 For example:
 
-    >>> get_periods_between(until=datetime.date(2014, 12, 31), period='monthly')
+    >>> periodical.get_periods_between(until=datetime.date(2014, 12, 31), period='monthly')
     [<CalendarPeriod '2014-09'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>]
+
+---
 
 ## Aggregation of values
 

@@ -27,11 +27,11 @@ if sys.argv[-1] == 'publish':
 
 
 setup(
-    name='docjson',
+    name='periodical',
     version=version,
     url='https://github.com/dabapps/periodical',
     license='BSD',
-    description='Simple, flexible JSON hypermedia documents.',
+    description='A library for working with time and date series.',
     author='Tom Christie',
     author_email='tom@tomchristie.com',
     py_modules=['periodical'],
