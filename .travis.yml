@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - "3.3"
+  - "3.2"
+  - "2.7"
+  - "2.6"
+
+install:
+ - pip install coverage
+ - pip install coveralls
+
+script: coverage run --source periodical test.py
+
+after_success:
+    coveralls

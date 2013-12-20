@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+export PYTHONPATH=.
+
+coverage run --source=periodical test.py $@
+flake8 periodical.py --ignore=E128,E501
+echo
+coverage report
