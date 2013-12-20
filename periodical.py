@@ -234,6 +234,9 @@ class CalendarPeriod(object):
     def __gt__(self, other):
         return self._start > other._end
 
+    def __eq__(self, other):
+        return self._start == other._start and self._end == other._end
+
 
 def periods_descending(date=None, period=None, num_periods=None):
     """
@@ -275,7 +278,7 @@ def periods_between(date_from=None, date_until=None, period=None):
     ascending = until > cal
 
     ret = []
-    while not until.contains(cal.start):
+    while not cal == until:
         ret.append(cal)
         cal = cal.next() if ascending else cal.previous()
     ret.append(cal)
