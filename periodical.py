@@ -231,6 +231,9 @@ class CalendarPeriod(object):
     def period(self):
         return self._period
 
+    def __gt__(self, other):
+        return self._start > other._end
+
 
 def periods_descending(date=None, period=None, num_periods=None):
     """
@@ -259,4 +262,21 @@ def periods_ascending(date=None, period=None, num_periods=None):
     for idx in range(num_periods):
         ret.append(cal)
         cal = cal.next()
+    return ret
+
+
+def periods_between(date_from=None, date_until=None, period=None):
+    """
+    Returns a list of CalendarPeriod instances, starting and ending with
+    periods that cover the given start and end dates.
+    """
+    cal = CalendarPeriod(date=date_from, period=period)
+    until = CalendarPeriod(date=date_until, period=period)
+    ascending = until > cal
+
+    ret = []
+    while not until.contains(cal.start):
+        ret.append(cal)
+        cal = cal.next() if ascending else cal.previous()
+    ret.append(cal)
     return ret

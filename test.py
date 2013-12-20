@@ -210,6 +210,41 @@ class TestPeriodical(unittest.TestCase):
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000', '2001', '2002'], reprs)
 
+    # Tests for periods_between
+    def test_yearly_series_between_dates(self):
+        date_from = datetime.date(2000, 1, 1)
+        date_until = datetime.date(2002, 1, 1)
+
+        periods = periodical.periods_between(date_from, date_until, 'yearly')
+        reprs = [str(period) for period in periods]
+        self.assertEqual(['2000', '2001', '2002'], reprs)
+
+        periods = periodical.periods_between(date_until, date_from, 'yearly')
+        reprs = [str(period) for period in periods]
+        self.assertEqual(['2002', '2001', '2000'], reprs)
+
+        periods = periodical.periods_between(date_from, date_from, 'yearly')
+        reprs = [str(period) for period in periods]
+        self.assertEqual(['2000'], reprs)
+
+    # Test using the current day instead of explicitly specifying
+    def test_today_func(self):
+        def today(self):
+            return datetime.date(2000, 1, 1)
+        restore = periodical.CalendarPeriod.today_func
+        try:
+            periodical.CalendarPeriod.today_func = today
+            cal = periodical.CalendarPeriod(period='monthly')
+        finally:
+            periodical.CalendarPeriod.today_func = restore
+        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
+        self.assertEqual(cal.end, datetime.date(2000, 1, 31))
+
+    def test_repr(self):
+        date = datetime.date(2000, 1, 1)
+        cal = periodical.CalendarPeriod(date=date, period='monthly')
+        self.assertEqual(repr(cal), "<CalendarPeriod '2000-01'>")
+
     # Tests for bad values
     def test_invalid_period(self):
         date = datetime.date(2000, 1, 1)

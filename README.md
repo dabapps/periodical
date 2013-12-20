@@ -144,17 +144,17 @@ Example code:
     >>> periodical.periods_descending(period='monthly', num_periods=3)
     [<CalendarPeriod '2014-11'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-09'>]
 
-### periods_between(from, until, period)
+### periods_between(date_from, date_until, period)
 
 Returns a list of `CalendarPeriod` objects in *either* chronological *or* reverse chronological order, starting and ending with a pair of given dates.
 
 ##### Arguments:
 
-* `from` **(Optional)** - The starting date.  If not provided, this defaults to the current day.
-* `until` **(Optional)** - The ending date.  If not provided, this defaults to the current day.
+* `date_from` **(Optional)** - The starting date.  If not provided, this defaults to the current day.
+* `date_until` **(Optional)** - The ending date.  If not provided, this defaults to the current day.
 * `period` - A string representing the period length.
 
-Example result from `periods_between(until=datetime.date(2014, 12, 31), period='monthly')` on Sept 23rd, 2014.
+Example result from `periods_between(date_until=datetime.date(2014, 12, 31), period='monthly')` on Sept 23rd, 2014.
 
     Sept 23rd 2014                 Dec 31st 2014
           |                             |
@@ -167,22 +167,38 @@ Example result from `periods_between(until=datetime.date(2014, 12, 31), period='
 
 Example code:
 
-    >>> periodical.periods_between(until=datetime.date(2014, 12, 31), period='monthly')
+    >>> periodical.periods_between(date_until=datetime.date(2014, 12, 31), period='monthly')
     [<CalendarPeriod '2014-09'>, <CalendarPeriod '2014-10'>, <CalendarPeriod '2014-11'>, <CalendarPeriod '2014-12'>]
 
 ---
 
 ## Aggregation of values
 
+**TODO**
+
 ### map(periods, date_value_pairs)
 
      {
-         <CalendarPeriod '2014-09'>: [],
-         <CalendarPeriod '2014-10'>: [],
+         <CalendarPeriod '2014-09'>: [20, 25],
+         <CalendarPeriod '2014-10'>: [20, 20],
          <CalendarPeriod '2014-11'>: [],
-         <CalendarPeriod '2014-12'>: []
+         <CalendarPeriod '2014-12'>: [30]
      }
 
 ### sum(periods, date_value_pairs, empty=None)
 
+     {
+         <CalendarPeriod '2014-09'>: 45,
+         <CalendarPeriod '2014-10'>: 40,
+         <CalendarPeriod '2014-11'>: None,
+         <CalendarPeriod '2014-12'>: 30
+     }
+
 ### average(periods, date_value_pairs, empty=None)
+
+     {
+         <CalendarPeriod '2014-09'>: 22.5,
+         <CalendarPeriod '2014-10'>: 20,
+         <CalendarPeriod '2014-11'>: None,
+         <CalendarPeriod '2014-12'>: 30
+     }
