@@ -220,6 +220,9 @@ class DatePeriod(object):
             return "%04d-Q%01d" % (self._start.year, (self._end.month / 3))
         return self.isoformat()
 
+    def __hash__(self):
+        return hash(str(self))
+
     @property
     def start(self):
         return self._start
@@ -295,7 +298,7 @@ def _next_pair_or_none(iterator):
     Returns the next pair in an iterator of pairs, or a pair of None.
     """
     try:
-        return iterator.next()
+        return next(iterator)
     except StopIteration:
         return (None, None)
 
