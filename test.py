@@ -11,143 +11,143 @@ class TestPeriodical(unittest.TestCase):
     # Date/period initialization tests
     def test_daily(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='daily')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 1))
+        period = periodical.DatePeriod(date=date, span='daily')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 1, 1))
 
     def test_weekly(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='weekly')
-        self.assertEqual(cal.start, datetime.date(1999, 12, 27))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 2))
+        period = periodical.DatePeriod(date=date, span='weekly')
+        self.assertEqual(period.start, datetime.date(1999, 12, 27))
+        self.assertEqual(period.end, datetime.date(2000, 1, 2))
 
     def test_monthly(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 31))
+        period = periodical.DatePeriod(date=date, span='monthly')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 1, 31))
 
     def test_quarterly(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='quarterly')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 3, 31))
+        period = periodical.DatePeriod(date=date, span='quarterly')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 3, 31))
 
     def test_yearly(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='yearly')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 12, 31))
+        period = periodical.DatePeriod(date=date, span='yearly')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 12, 31))
 
     # Representation initialization tests
     def test_daily_repr(self):
-        cal = periodical.CalendarPeriod('2000-01-01')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 1))
+        period = periodical.DatePeriod('2000-01-01')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 1, 1))
 
     def test_weekly_repr(self):
-        cal = periodical.CalendarPeriod('2000-W1')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 3))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 9))
+        period = periodical.DatePeriod('2000-W1')
+        self.assertEqual(period.start, datetime.date(2000, 1, 3))
+        self.assertEqual(period.end, datetime.date(2000, 1, 9))
 
     def test_monthly_repr(self):
-        cal = periodical.CalendarPeriod('2000-01')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 31))
+        period = periodical.DatePeriod('2000-01')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 1, 31))
 
     def test_quarterly_repr(self):
-        cal = periodical.CalendarPeriod('2000-Q1')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 3, 31))
+        period = periodical.DatePeriod('2000-Q1')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 3, 31))
 
     def test_yearly_repr(self):
-        cal = periodical.CalendarPeriod('2000')
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 12, 31))
+        period = periodical.DatePeriod('2000')
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 12, 31))
 
     # Tests for `.previous()`
     def test_daily_previous(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='daily').previous()
-        self.assertEqual(cal.start, datetime.date(1999, 12, 31))
-        self.assertEqual(cal.end, datetime.date(1999, 12, 31))
+        period = periodical.DatePeriod(date=date, span='daily').previous()
+        self.assertEqual(period.start, datetime.date(1999, 12, 31))
+        self.assertEqual(period.end, datetime.date(1999, 12, 31))
 
     def test_weekly_previous(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='weekly').previous()
-        self.assertEqual(cal.start, datetime.date(1999, 12, 20))
-        self.assertEqual(cal.end, datetime.date(1999, 12, 26))
+        period = periodical.DatePeriod(date=date, span='weekly').previous()
+        self.assertEqual(period.start, datetime.date(1999, 12, 20))
+        self.assertEqual(period.end, datetime.date(1999, 12, 26))
 
     def test_monthly_previous(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly').previous()
-        self.assertEqual(cal.start, datetime.date(1999, 12, 1))
-        self.assertEqual(cal.end, datetime.date(1999, 12, 31))
+        period = periodical.DatePeriod(date=date, span='monthly').previous()
+        self.assertEqual(period.start, datetime.date(1999, 12, 1))
+        self.assertEqual(period.end, datetime.date(1999, 12, 31))
 
         date = datetime.date(2000, 3, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly').previous()
-        self.assertEqual(cal.start, datetime.date(2000, 2, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 2, 29))
+        period = periodical.DatePeriod(date=date, span='monthly').previous()
+        self.assertEqual(period.start, datetime.date(2000, 2, 1))
+        self.assertEqual(period.end, datetime.date(2000, 2, 29))
 
     def test_quarterly_previous(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='quarterly').previous()
-        self.assertEqual(cal.start, datetime.date(1999, 10, 1))
-        self.assertEqual(cal.end, datetime.date(1999, 12, 31))
+        period = periodical.DatePeriod(date=date, span='quarterly').previous()
+        self.assertEqual(period.start, datetime.date(1999, 10, 1))
+        self.assertEqual(period.end, datetime.date(1999, 12, 31))
 
         date = datetime.date(2000, 4, 1)
-        cal = periodical.CalendarPeriod(date=date, period='quarterly')
-        cal = periodical.CalendarPeriod(date=date, period='quarterly').previous()
-        self.assertEqual(cal.start, datetime.date(2000, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 3, 31))
+        period = periodical.DatePeriod(date=date, span='quarterly')
+        period = periodical.DatePeriod(date=date, span='quarterly').previous()
+        self.assertEqual(period.start, datetime.date(2000, 1, 1))
+        self.assertEqual(period.end, datetime.date(2000, 3, 31))
 
     def test_yearly_previous(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='yearly').previous()
-        self.assertEqual(cal.start, datetime.date(1999, 1, 1))
-        self.assertEqual(cal.end, datetime.date(1999, 12, 31))
+        period = periodical.DatePeriod(date=date, span='yearly').previous()
+        self.assertEqual(period.start, datetime.date(1999, 1, 1))
+        self.assertEqual(period.end, datetime.date(1999, 12, 31))
 
     # Tests for `.next()`
     def test_daily_next(self):
         date = datetime.date(2000, 1, 31)
-        cal = periodical.CalendarPeriod(date=date, period='daily').next()
-        self.assertEqual(cal.start, datetime.date(2000, 2, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 2, 1))
+        period = periodical.DatePeriod(date=date, span='daily').next()
+        self.assertEqual(period.start, datetime.date(2000, 2, 1))
+        self.assertEqual(period.end, datetime.date(2000, 2, 1))
 
     def test_weekly_next(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='weekly').next()
-        self.assertEqual(cal.start, datetime.date(2000, 1, 3))
-        self.assertEqual(cal.end, datetime.date(2000, 1, 9))
+        period = periodical.DatePeriod(date=date, span='weekly').next()
+        self.assertEqual(period.start, datetime.date(2000, 1, 3))
+        self.assertEqual(period.end, datetime.date(2000, 1, 9))
 
     def test_monthly_next(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly').next()
-        self.assertEqual(cal.start, datetime.date(2000, 2, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 2, 29))
+        period = periodical.DatePeriod(date=date, span='monthly').next()
+        self.assertEqual(period.start, datetime.date(2000, 2, 1))
+        self.assertEqual(period.end, datetime.date(2000, 2, 29))
 
         date = datetime.date(2000, 12, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly').next()
-        self.assertEqual(cal.start, datetime.date(2001, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2001, 1, 31))
+        period = periodical.DatePeriod(date=date, span='monthly').next()
+        self.assertEqual(period.start, datetime.date(2001, 1, 1))
+        self.assertEqual(period.end, datetime.date(2001, 1, 31))
 
     def test_quarterly_next(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='quarterly').next()
-        self.assertEqual(cal.start, datetime.date(2000, 4, 1))
-        self.assertEqual(cal.end, datetime.date(2000, 6, 30))
+        period = periodical.DatePeriod(date=date, span='quarterly').next()
+        self.assertEqual(period.start, datetime.date(2000, 4, 1))
+        self.assertEqual(period.end, datetime.date(2000, 6, 30))
 
         date = datetime.date(2000, 10, 1)
-        cal = periodical.CalendarPeriod(date=date, period='quarterly')
-        cal = periodical.CalendarPeriod(date=date, period='quarterly').next()
-        self.assertEqual(cal.start, datetime.date(2001, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2001, 3, 31))
+        period = periodical.DatePeriod(date=date, span='quarterly')
+        period = periodical.DatePeriod(date=date, span='quarterly').next()
+        self.assertEqual(period.start, datetime.date(2001, 1, 1))
+        self.assertEqual(period.end, datetime.date(2001, 3, 31))
 
     def test_yearly_next(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='yearly').next()
-        self.assertEqual(cal.start, datetime.date(2001, 1, 1))
-        self.assertEqual(cal.end, datetime.date(2001, 12, 31))
+        period = periodical.DatePeriod(date=date, span='yearly').next()
+        self.assertEqual(period.start, datetime.date(2001, 1, 1))
+        self.assertEqual(period.end, datetime.date(2001, 12, 31))
 
     # Tests for periods_descending(), and isoformat representations
     def test_daily_series_descending(self):
@@ -232,33 +232,33 @@ class TestPeriodical(unittest.TestCase):
     def test_today_func(self):
         def today(self):
             return datetime.date(2000, 1, 1)
-        restore = periodical.CalendarPeriod.today_func
+        restore = periodical.DatePeriod.today_func
         try:
-            periodical.CalendarPeriod.today_func = today
-            cal = periodical.CalendarPeriod(period='monthly')
+            periodical.DatePeriod.today_func = today
+            cal = periodical.DatePeriod(span='monthly')
         finally:
-            periodical.CalendarPeriod.today_func = restore
+            periodical.DatePeriod.today_func = restore
         self.assertEqual(cal.start, datetime.date(2000, 1, 1))
         self.assertEqual(cal.end, datetime.date(2000, 1, 31))
 
     def test_repr(self):
         date = datetime.date(2000, 1, 1)
-        cal = periodical.CalendarPeriod(date=date, period='monthly')
-        self.assertEqual(repr(cal), "<CalendarPeriod '2000-01'>")
+        cal = periodical.DatePeriod(date=date, span='monthly')
+        self.assertEqual(repr(cal), "<DatePeriod '2000-01'>")
 
     # Tests for bad values
     def test_invalid_period(self):
         date = datetime.date(2000, 1, 1)
         with self.assertRaises(ValueError):
-            periodical.CalendarPeriod(date=date, period='blibble')
+            periodical.DatePeriod(date=date, span='blibble')
 
     def test_unknown_representation(self):
         with self.assertRaises(ValueError):
-            periodical.CalendarPeriod('199x')
+            periodical.DatePeriod('199x')
 
     def test_map(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -268,16 +268,16 @@ class TestPeriodical(unittest.TestCase):
         ]
         mapped = periodical.map(periods, date_value_pairs)
         expected = collections.OrderedDict([
-            (periodical.CalendarPeriod('2014-09'), [20, 25]),
-            (periodical.CalendarPeriod('2014-10'), [20, 20]),
-            (periodical.CalendarPeriod('2014-11'), []),
-            (periodical.CalendarPeriod('2014-12'), [30]),
+            (periodical.DatePeriod('2014-09'), [20, 25]),
+            (periodical.DatePeriod('2014-10'), [20, 20]),
+            (periodical.DatePeriod('2014-11'), []),
+            (periodical.DatePeriod('2014-12'), [30]),
         ])
         self.assertEqual(mapped, expected)
 
     def test_summation(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -287,16 +287,16 @@ class TestPeriodical(unittest.TestCase):
         ]
         summed = periodical.summation(periods, date_value_pairs)
         expected = collections.OrderedDict([
-            (periodical.CalendarPeriod('2014-09'), 45),
-            (periodical.CalendarPeriod('2014-10'), 40),
-            (periodical.CalendarPeriod('2014-11'), 0),
-            (periodical.CalendarPeriod('2014-12'), 30),
+            (periodical.DatePeriod('2014-09'), 45),
+            (periodical.DatePeriod('2014-10'), 40),
+            (periodical.DatePeriod('2014-11'), 0),
+            (periodical.DatePeriod('2014-12'), 30),
         ])
         self.assertEqual(summed, expected)
 
     def test_average(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -306,16 +306,16 @@ class TestPeriodical(unittest.TestCase):
         ]
         averages = periodical.average(periods, date_value_pairs)
         expected = collections.OrderedDict([
-            (periodical.CalendarPeriod('2014-09'), 22.5),
-            (periodical.CalendarPeriod('2014-10'), 20.0),
-            (periodical.CalendarPeriod('2014-11'), None),
-            (periodical.CalendarPeriod('2014-12'), 30.0),
+            (periodical.DatePeriod('2014-09'), 22.5),
+            (periodical.DatePeriod('2014-10'), 20.0),
+            (periodical.DatePeriod('2014-11'), None),
+            (periodical.DatePeriod('2014-12'), 30.0),
         ])
         self.assertEqual(averages, expected)
 
     def test_count(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
         dates = [
             datetime.date(2014, 9, 1),
             datetime.date(2014, 9, 2),
@@ -325,10 +325,10 @@ class TestPeriodical(unittest.TestCase):
         ]
         counts = periodical.count(periods, dates)
         expected = collections.OrderedDict([
-            (periodical.CalendarPeriod('2014-09'), 2),
-            (periodical.CalendarPeriod('2014-10'), 2),
-            (periodical.CalendarPeriod('2014-11'), 0),
-            (periodical.CalendarPeriod('2014-12'), 1),
+            (periodical.DatePeriod('2014-09'), 2),
+            (periodical.DatePeriod('2014-10'), 2),
+            (periodical.DatePeriod('2014-11'), 0),
+            (periodical.DatePeriod('2014-12'), 1),
         ])
         self.assertEqual(counts, expected)
 

@@ -15,27 +15,27 @@ weekly_re = re.compile('(?P<year>[0-9]+)[-/][Ww](?P<quarter>[0-9]+)$')
 daily_re = re.compile('(?P<year>[0-9]+)[-/](?P<month>[0-9]+)[-/](?P<day>[0-9]+)$')
 
 
-class CalendarPeriod(object):
+class DatePeriod(object):
     """
     An immuntable object that represents a calendering period,
     which may be one of: daily, weekly, monthly, quarterly, yearly.
     """
     today_func = datetime.date.today
 
-    def __init__(self, string_repr=None, date=None, period=None, _start=None, _end=None):
+    def __init__(self, string_repr=None, date=None, span=None, _start=None, _end=None):
 
         if _start is not None and _end is not None:
-            # Created a new CalendarPeriod with explicit start and end dates,
+            # Created a new DatePeriod with explicit start and end dates,
             # as a result of calling `.previous()` or `.next()`.
-            self._period = period
+            self._span = span
             self._start = _start
             self._end = _end
             return
 
         if string_repr:
-            # Create a CalendarPeriod by supplying a string representation.
+            # Create a DatePeriod by supplying a string representation.
             assert date is None, 'Cannot supply both `string_repr` and `date`'
-            assert period is None, 'Cannot supply both `string_repr` and `period`'
+            assert span is None, 'Cannot supply both `string_repr` and `span`'
 
             yearly_result = yearly_re.match(string_repr)
             quarerly_result = quarterly_re.match(string_repr)
@@ -46,15 +46,15 @@ class CalendarPeriod(object):
             if yearly_result:
                 (year,) = yearly_result.groups()
                 date = datetime.date(int(year), 1, 1)
-                period = 'yearly'
+                span = 'yearly'
             elif quarerly_result:
                 (year, quarter) = quarerly_result.groups()
                 date = datetime.date(int(year), (int(quarter) * 3) - 2, 1)
-                period = 'quarterly'
+                span = 'quarterly'
             elif monthly_result:
                 (year, month) = monthly_result.groups()
                 date = datetime.date(int(year), int(month), 1)
-                period = 'monthly'
+                span = 'monthly'
             elif weekly_result:
                 # ISO 8601 dates always include 4th Jan in the first week.
                 # We populate a date that will be in the correct week period.
@@ -63,65 +63,65 @@ class CalendarPeriod(object):
                     datetime.date(int(year), 1, 4) +
                     datetime.timedelta(days=(int(week) * 7) - 7)
                 )
-                period = 'weekly'
+                span = 'weekly'
             elif daily_result:
                 (year, month, day) = daily_result.groups()
                 date = datetime.date(int(year), int(month), int(day))
-                period = 'daily'
+                span = 'daily'
             else:
                 raise ValueError('Unknown date representation')
 
-        # Create a CalendarPeriod by supplying a date and period.
-        assert period is not None, '`period` argument not supplied.'
+        # Create a DatePeriod by supplying a date and span.
+        assert span is not None, '`span` argument not supplied.'
 
         if date is None:
             date = self.today_func()
 
         try:
-            self._period = {
+            self._span = {
                 'd': 'daily',
                 'w': 'weekly',
                 'm': 'monthly',
                 'q': 'quarterly',
                 'y': 'yearly'
-            }[period.lower()[0]]
+            }[span.lower()[0]]
         except KeyError:
-            raise ValueError("Invalid value for `period` argument '%s'" % period)
+            raise ValueError("Invalid value for `span` argument '%s'" % span)
 
-        if self._period == 'daily':
+        if self._span == 'daily':
             self._start = date
             self._end = date
-        elif self._period == 'weekly':
+        elif self._span == 'weekly':
             weekday = date.weekday()  # 0..6
             self._start = date - datetime.timedelta(days=weekday)
             self._end = date + datetime.timedelta(days=(6 - weekday))
-        elif self._period == 'monthly':
+        elif self._span == 'monthly':
             month_end_day = calendar.monthrange(date.year, date.month)[1]
             self._start = datetime.date(date.year, date.month, 1)
             self._end = datetime.date(date.year, date.month, month_end_day)
-        elif self._period == 'quarterly':
+        elif self._span == 'quarterly':
             current_quarter = int((date.month - 1) / 3)  # In the range 0..3
             st_month = (current_quarter * 3) + 1   # (1, 4, 7, 10)
             en_month = (current_quarter * 3) + 3   # (3, 6, 9, 12)
             month_end_day = calendar.monthrange(date.year, en_month)[1]
             self._start = datetime.date(date.year, st_month, 1)
             self._end = datetime.date(date.year, en_month, month_end_day)
-        else:  # self._period == 'yearly':
+        else:  # self._span == 'yearly':
             self._start = datetime.date(date.year, 1, 1)
             self._end = datetime.date(date.year, 12, 31)
 
     def previous(self):
         """
-        Return a new CalendarPeriod representing the period
+        Return a new DatePeriod representing the period
         immediately prior to this one.
         """
-        if self._period == 'daily':
+        if self._span == 'daily':
             start = self._start - datetime.timedelta(days=1)
             end = self._end - datetime.timedelta(days=1)
-        elif self._period == 'weekly':
+        elif self._span == 'weekly':
             start = self._start - datetime.timedelta(days=7)
             end = self._end - datetime.timedelta(days=7)
-        elif self._period == 'monthly':
+        elif self._span == 'monthly':
             year = self._start.year
             if self._start.month == 1:
                 year -= 1
@@ -130,7 +130,7 @@ class CalendarPeriod(object):
             end_day = calendar.monthrange(year, end_month)[1]
             start = self._start.replace(month=start_month, year=year)
             end = self._end.replace(day=end_day, month=end_month, year=year)
-        elif self._period == 'quarterly':
+        elif self._span == 'quarterly':
             year = self._start.year
             if self._start.month == 1:
                 year -= 1
@@ -139,25 +139,25 @@ class CalendarPeriod(object):
             end_day = calendar.monthrange(year, end_month)[1]
             start = self._start.replace(month=start_month, year=year)
             end = self._end.replace(day=end_day, month=end_month, year=year)
-        else:  # self._period == 'yearly'
+        else:  # self._span == 'yearly'
             year = self._start.year - 1
             start = self._start.replace(year)
             end = self._end.replace(year)
 
-        return CalendarPeriod(period=self.period, _start=start, _end=end)
+        return DatePeriod(span=self.span, _start=start, _end=end)
 
     def next(self):
         """
-        Return a new CalendarPeriod representing the period
+        Return a new DatePeriod representing the period
         immediately following this one.
         """
-        if self._period == 'daily':
+        if self._span == 'daily':
             start = self._start + datetime.timedelta(days=1)
             end = self._end + datetime.timedelta(days=1)
-        elif self._period == 'weekly':
+        elif self._span == 'weekly':
             start = self._start + datetime.timedelta(days=7)
             end = self._end + datetime.timedelta(days=7)
-        elif self._period == 'monthly':
+        elif self._span == 'monthly':
             year = self._start.year
             if self._start.month == 12:
                 year += 1
@@ -166,7 +166,7 @@ class CalendarPeriod(object):
             end_day = calendar.monthrange(year, end_month)[1]
             start = self._start.replace(month=start_month, year=year)
             end = self._end.replace(day=end_day, month=end_month, year=year)
-        elif self._period == 'quarterly':
+        elif self._span == 'quarterly':
             year = self._start.year
             if self._start.month == 10:
                 year += 1
@@ -175,25 +175,25 @@ class CalendarPeriod(object):
             end_day = calendar.monthrange(year, end_month)[1]
             start = self._start.replace(month=start_month, year=year)
             end = self._end.replace(day=end_day, month=end_month, year=year)
-        else:  # self._period == 'yearly'
+        else:  # self._span == 'yearly'
             year = self._start.year + 1
             start = self._start.replace(year)
             end = self._end.replace(year)
 
-        return CalendarPeriod(period=self.period, _start=start, _end=end)
+        return DatePeriod(span=self.span, _start=start, _end=end)
 
     def isoformat(self):
         """
         Return an ISO8601 formatted string representing the period.
         """
-        if self.period == 'daily':
+        if self.span == 'daily':
             # YYYY-MM-DD
             return self._start.isoformat()
-        elif self.period == 'weekly':
+        elif self.span == 'weekly':
             # YYYY-W##
             iso_year, iso_week, iso_day = self._start.isocalendar()
             return '%d-W%02d' % (iso_year, iso_week)
-        elif self.period in ('monthly', 'quarterly'):
+        elif self.span in ('monthly', 'quarterly'):
             # YYYY-MM
             return self._start.isoformat()[:7]
         else:
@@ -208,15 +208,15 @@ class CalendarPeriod(object):
 
     def __repr__(self):
         """
-        Returns a representation that uniquely identifies the calendar period.
+        Returns a representation that uniquely identifies the date period.
         """
         return "<%s '%s'>" % (self.__class__.__name__, self)
 
     def __str__(self):
         """
-        Returns a representation that uniquely identifies the calendar period.
+        Returns a representation that uniquely identifies the date period.
         """
-        if self.period == 'quarterly':
+        if self.span == 'quarterly':
             return "%04d-Q%01d" % (self._start.year, (self._end.month / 3))
         return self.isoformat()
 
@@ -229,8 +229,8 @@ class CalendarPeriod(object):
         return self._end
 
     @property
-    def period(self):
-        return self._period
+    def span(self):
+        return self._span
 
     def __gt__(self, other):
         return self._start > other._end
@@ -241,50 +241,50 @@ class CalendarPeriod(object):
 
 # Series functions
 
-def periods_descending(date=None, period=None, num_periods=None):
+def periods_descending(date=None, span=None, num_periods=None):
     """
-    Returns a list of CalendarPeriod instances, starting with a period that
+    Returns a list of DatePeriod instances, starting with a period that
     covers the given date and iterating through the preceeding periods.
     """
     assert num_periods is not None, '`num_periods` argument not supplied.'
 
     ret = []
-    cal = CalendarPeriod(date=date, period=period)
+    period = DatePeriod(date=date, span=span)
     for idx in range(num_periods):
-        ret.append(cal)
-        cal = cal.previous()
+        ret.append(period)
+        period = period.previous()
     return ret
 
 
-def periods_ascending(date=None, period=None, num_periods=None):
+def periods_ascending(date=None, span=None, num_periods=None):
     """
-    Returns a list of CalendarPeriod instances, starting with a period that
+    Returns a list of DatePeriod instances, starting with a period that
     covers the given date and iterating through the following periods.
     """
     assert num_periods is not None, '`num_periods` argument not supplied.'
 
     ret = []
-    cal = CalendarPeriod(date=date, period=period)
+    period = DatePeriod(date=date, span=span)
     for idx in range(num_periods):
-        ret.append(cal)
-        cal = cal.next()
+        ret.append(period)
+        period = period.next()
     return ret
 
 
-def periods_between(date_from=None, date_until=None, period=None):
+def periods_between(date_from=None, date_until=None, span=None):
     """
-    Returns a list of CalendarPeriod instances, starting and ending with
+    Returns a list of DatePeriod instances, starting and ending with
     periods that cover the given start and end dates.
     """
-    cal = CalendarPeriod(date=date_from, period=period)
-    until = CalendarPeriod(date=date_until, period=period)
-    ascending = until > cal
+    period = DatePeriod(date=date_from, span=span)
+    until = DatePeriod(date=date_until, span=span)
+    ascending = until > period
 
     ret = []
-    while not cal == until:
-        ret.append(cal)
-        cal = cal.next() if ascending else cal.previous()
-    ret.append(cal)
+    while not period == until:
+        ret.append(period)
+        period = period.next() if ascending else period.previous()
+    ret.append(period)
     return ret
 
 
