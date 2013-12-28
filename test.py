@@ -149,82 +149,82 @@ class TestPeriodical(unittest.TestCase):
         self.assertEqual(period.start, datetime.date(2001, 1, 1))
         self.assertEqual(period.end, datetime.date(2001, 12, 31))
 
-    # Tests for periods_descending(), and isoformat representations
+    # Tests for date_periods_descending(), and isoformat representations
     def test_daily_series_descending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_descending(date, 'daily', 3)
+        periods = periodical.date_periods_descending(date, 'daily', 3)
         iso = [period.isoformat() for period in periods]
         self.assertEqual(['2000-01-01', '1999-12-31', '1999-12-30'], iso)
 
     def test_weekly_series_descending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_descending(date, 'weekly', 3)
+        periods = periodical.date_periods_descending(date, 'weekly', 3)
         iso = [period.isoformat() for period in periods]
         self.assertEqual(['1999-W52', '1999-W51', '1999-W50'], iso)
 
     def test_monthly_series_descending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_descending(date, 'monthly', 3)
+        periods = periodical.date_periods_descending(date, 'monthly', 3)
         iso = [period.isoformat() for period in periods]
         self.assertEqual(['2000-01', '1999-12', '1999-11'], iso)
 
     def test_quarterly_series_descending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_descending(date, 'quarterly', 3)
+        periods = periodical.date_periods_descending(date, 'quarterly', 3)
         iso = [period.isoformat() for period in periods]
         self.assertEqual(['2000-01', '1999-10', '1999-07'], iso)
 
     def test_yearly_series_descending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_descending(date, 'yearly', 3)
+        periods = periodical.date_periods_descending(date, 'yearly', 3)
         iso = [period.isoformat() for period in periods]
         self.assertEqual(['2000', '1999', '1998'], iso)
 
-    # Tests for periods_ascending(), and string representations
+    # Tests for date_periods_ascending(), and string representations
     def test_daily_series_ascending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_ascending(date, 'daily', 3)
+        periods = periodical.date_periods_ascending(date, 'daily', 3)
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000-01-01', '2000-01-02', '2000-01-03'], reprs)
 
     def test_weekly_series_ascending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_ascending(date, 'weekly', 3)
+        periods = periodical.date_periods_ascending(date, 'weekly', 3)
         reprs = [str(period) for period in periods]
         self.assertEqual(['1999-W52', '2000-W01', '2000-W02'], reprs)
 
     def test_monthly_series_ascending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_ascending(date, 'monthly', 3)
+        periods = periodical.date_periods_ascending(date, 'monthly', 3)
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000-01', '2000-02', '2000-03'], reprs)
 
     def test_quarterly_series_ascending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_ascending(date, 'quarterly', 3)
+        periods = periodical.date_periods_ascending(date, 'quarterly', 3)
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000-Q1', '2000-Q2', '2000-Q3'], reprs)
 
     def test_yearly_series_ascending(self):
         date = datetime.date(2000, 1, 1)
-        periods = periodical.periods_ascending(date, 'yearly', 3)
+        periods = periodical.date_periods_ascending(date, 'yearly', 3)
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000', '2001', '2002'], reprs)
 
-    # Tests for periods_between
+    # Tests for date_periods_between
     def test_yearly_series_between_dates(self):
         date_from = datetime.date(2000, 1, 1)
         date_until = datetime.date(2002, 1, 1)
 
-        periods = periodical.periods_between(date_from, date_until, 'yearly')
+        periods = periodical.date_periods_between(date_from, date_until, 'yearly')
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000', '2001', '2002'], reprs)
 
-        periods = periodical.periods_between(date_until, date_from, 'yearly')
+        periods = periodical.date_periods_between(date_until, date_from, 'yearly')
         reprs = [str(period) for period in periods]
         self.assertEqual(['2002', '2001', '2000'], reprs)
 
-        periods = periodical.periods_between(date_from, date_from, 'yearly')
+        periods = periodical.date_periods_between(date_from, date_from, 'yearly')
         reprs = [str(period) for period in periods]
         self.assertEqual(['2000'], reprs)
 
@@ -258,7 +258,7 @@ class TestPeriodical(unittest.TestCase):
 
     def test_map(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
+        periods = periodical.date_periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -277,7 +277,7 @@ class TestPeriodical(unittest.TestCase):
 
     def test_summation(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
+        periods = periodical.date_periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -296,7 +296,7 @@ class TestPeriodical(unittest.TestCase):
 
     def test_average(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
+        periods = periodical.date_periods_ascending(date=date, span='monthly', num_periods=4)
         date_value_pairs = [
             (datetime.date(2014, 9, 1), 20),
             (datetime.date(2014, 9, 2), 25),
@@ -315,7 +315,7 @@ class TestPeriodical(unittest.TestCase):
 
     def test_count(self):
         date = datetime.date(2014, 9, 1)
-        periods = periodical.periods_ascending(date=date, span='monthly', num_periods=4)
+        periods = periodical.date_periods_ascending(date=date, span='monthly', num_periods=4)
         dates = [
             datetime.date(2014, 9, 1),
             datetime.date(2014, 9, 2),

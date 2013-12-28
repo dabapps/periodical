@@ -91,7 +91,7 @@ The `isoformat()` method returns an ISO 8601 formatted date representing the sta
 
 The `periodical` module provides a few functions for returning sequences of date periods.  These allow you to easily return ranges such as "the last 12 months", or "all the weeks since the start of the year".
 
-### periods_ascending(from, period, num_periods)
+### date_periods_ascending(from, period, num_periods)
 
 Returns a list of `DatePeriod` objects in chronological order, starting with a given date.
 
@@ -101,7 +101,7 @@ Returns a list of `DatePeriod` objects in chronological order, starting with a g
 * `span` - A string representing the period length.
 * `num_periods` - An integer representing the number of `DatePeriod` objects to return.
 
-Example result from `periods_ascending(span='monthly', num_periods=3)` on Nov 25th, 2014.
+Example result from `date_periods_ascending(span='monthly', num_periods=3)` on Nov 25th, 2014.
 
        Nov 25th 2014
            |
@@ -114,10 +114,10 @@ Example result from `periods_ascending(span='monthly', num_periods=3)` on Nov 25
 
 Example code:
 
-    >>> periodical.periods_ascending(span='monthly', num_periods=3)
+    >>> periodical.date_periods_ascending(span='monthly', num_periods=3)
     [<DatePeriod '2014-11'>, <DatePeriod '2014-12'>, <DatePeriod '2015-01'>]
 
-### periods_descending(from, period, num_periods)
+### date_periods_descending(from, period, num_periods)
 
 Returns a list of `DatePeriod` objects in reverse chronological order, starting with a given date.
 
@@ -127,7 +127,7 @@ Returns a list of `DatePeriod` objects in reverse chronological order, starting 
 * `span` - A string representing the period length.
 * `num_periods` - An integer representing the number of `DatePeriod` objects to return.
 
-Example result from `periods_descending(span='monthly', num_periods=3)` on Nov 25th, 2014.
+Example result from `date_periods_descending(span='monthly', num_periods=3)` on Nov 25th, 2014.
 
                        Nov 25th 2014
                              |
@@ -141,10 +141,10 @@ Example result from `periods_descending(span='monthly', num_periods=3)` on Nov 2
 
 Example code:
 
-    >>> periodical.periods_descending(span='monthly', num_periods=3)
+    >>> periodical.date_periods_descending(span='monthly', num_periods=3)
     [<DatePeriod '2014-11'>, <DatePeriod '2014-10'>, <DatePeriod '2014-09'>]
 
-### periods_between(date_from, date_until, period)
+### date_periods_between(date_from, date_until, period)
 
 Returns a list of `DatePeriod` objects in *either* chronological *or* reverse chronological order, starting and ending with a pair of given dates.
 
@@ -154,7 +154,7 @@ Returns a list of `DatePeriod` objects in *either* chronological *or* reverse ch
 * `date_until` **(Optional)** - The ending date.  If not provided, this defaults to the current day.
 * `span` - A string representing the period length.
 
-Example result from `periods_between(date_until=datetime.date(2014, 12, 31), span='monthly')` on Sept 23rd, 2014.
+Example result from `date_periods_between(date_until=datetime.date(2014, 12, 31), span='monthly')` on Sept 23rd, 2014.
 
     Sept 23rd 2014                 Dec 31st 2014
           |                             |
@@ -167,7 +167,7 @@ Example result from `periods_between(date_until=datetime.date(2014, 12, 31), spa
 
 Example code:
 
-    >>> periodical.periods_between(date_until=datetime.date(2014, 12, 31), span='monthly')
+    >>> periodical.date_periods_between(date_until=datetime.date(2014, 12, 31), span='monthly')
     [<DatePeriod '2014-09'>, <DatePeriod '2014-10'>, <DatePeriod '2014-11'>, <DatePeriod '2014-12'>]
 
 ---

@@ -241,7 +241,7 @@ class DatePeriod(object):
 
 # Series functions
 
-def periods_descending(date=None, span=None, num_periods=None):
+def date_periods_descending(date=None, span=None, num_periods=None):
     """
     Returns a list of DatePeriod instances, starting with a period that
     covers the given date and iterating through the preceeding periods.
@@ -256,7 +256,7 @@ def periods_descending(date=None, span=None, num_periods=None):
     return ret
 
 
-def periods_ascending(date=None, span=None, num_periods=None):
+def date_periods_ascending(date=None, span=None, num_periods=None):
     """
     Returns a list of DatePeriod instances, starting with a period that
     covers the given date and iterating through the following periods.
@@ -271,7 +271,7 @@ def periods_ascending(date=None, span=None, num_periods=None):
     return ret
 
 
-def periods_between(date_from=None, date_until=None, span=None):
+def date_periods_between(date_from=None, date_until=None, span=None):
     """
     Returns a list of DatePeriod instances, starting and ending with
     periods that cover the given start and end dates.
