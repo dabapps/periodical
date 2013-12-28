@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import calendar
+import collections
 import datetime
 import re
 
@@ -238,6 +239,8 @@ class CalendarPeriod(object):
         return self._start == other._start and self._end == other._end
 
 
+# Series functions
+
 def periods_descending(date=None, period=None, num_periods=None):
     """
     Returns a list of CalendarPeriod instances, starting with a period that
@@ -283,3 +286,54 @@ def periods_between(date_from=None, date_until=None, period=None):
         cal = cal.next() if ascending else cal.previous()
     ret.append(cal)
     return ret
+
+
+# Aggregation functions
+
+def _next_pair_or_none(iterator):
+    """
+    Returns the next pair in an iterator of pairs, or a pair of None.
+    """
+    try:
+        return iterator.next()
+    except StopIteration:
+        return (None, None)
+
+
+def map(periods, date_value_pairs, transform=None):
+    """
+    Given a sequence of dates periods, and a list of date/value pairs,
+    map each value to the period containing it's date.
+    """
+    is_descending = periods and (periods[0] > periods[-1])
+    sort_by_date = lambda date_value_pair: date_value_pair[0]
+    date_value_iter = iter(sorted(date_value_pairs, key=sort_by_date, reverse=is_descending))
+
+    ret = collections.OrderedDict()
+    date, value = _next_pair_or_none(date_value_iter)
+    for period in periods:
+        this_mapping = []
+        while date is not None and period.contains(date):
+            this_mapping.append(value)
+            date, value = _next_pair_or_none(date_value_iter)
+
+        if transform is not None:
+            this_mapping = transform(this_mapping)
+
+        ret[period] = this_mapping
+
+    return ret
+
+
+def summation(periods, date_value_pairs):
+    return map(periods, date_value_pairs, transform=sum)
+
+
+def average(periods, date_value_pairs):
+    avg = lambda values: float(sum(values)) / len(values) if values else None
+    return map(periods, date_value_pairs, transform=avg)
+
+
+def count(periods, dates):
+    date_value_pairs = [(date, None) for date in dates]
+    return map(periods, date_value_pairs, transform=len)

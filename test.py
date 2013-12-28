@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import collections
 import datetime
 import periodical
 import unittest
@@ -254,6 +255,83 @@ class TestPeriodical(unittest.TestCase):
     def test_unknown_representation(self):
         with self.assertRaises(ValueError):
             periodical.CalendarPeriod('199x')
+
+    def test_map(self):
+        date = datetime.date(2014, 9, 1)
+        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        date_value_pairs = [
+            (datetime.date(2014, 9, 1), 20),
+            (datetime.date(2014, 9, 2), 25),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 12, 1), 30),
+        ]
+        mapped = periodical.map(periods, date_value_pairs)
+        expected = collections.OrderedDict([
+            (periodical.CalendarPeriod('2014-09'), [20, 25]),
+            (periodical.CalendarPeriod('2014-10'), [20, 20]),
+            (periodical.CalendarPeriod('2014-11'), []),
+            (periodical.CalendarPeriod('2014-12'), [30]),
+        ])
+        self.assertEqual(mapped, expected)
+
+    def test_summation(self):
+        date = datetime.date(2014, 9, 1)
+        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        date_value_pairs = [
+            (datetime.date(2014, 9, 1), 20),
+            (datetime.date(2014, 9, 2), 25),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 12, 1), 30),
+        ]
+        summed = periodical.summation(periods, date_value_pairs)
+        expected = collections.OrderedDict([
+            (periodical.CalendarPeriod('2014-09'), 45),
+            (periodical.CalendarPeriod('2014-10'), 40),
+            (periodical.CalendarPeriod('2014-11'), 0),
+            (periodical.CalendarPeriod('2014-12'), 30),
+        ])
+        self.assertEqual(summed, expected)
+
+    def test_average(self):
+        date = datetime.date(2014, 9, 1)
+        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        date_value_pairs = [
+            (datetime.date(2014, 9, 1), 20),
+            (datetime.date(2014, 9, 2), 25),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 10, 1), 20),
+            (datetime.date(2014, 12, 1), 30),
+        ]
+        averages = periodical.average(periods, date_value_pairs)
+        expected = collections.OrderedDict([
+            (periodical.CalendarPeriod('2014-09'), 22.5),
+            (periodical.CalendarPeriod('2014-10'), 20.0),
+            (periodical.CalendarPeriod('2014-11'), None),
+            (periodical.CalendarPeriod('2014-12'), 30.0),
+        ])
+        self.assertEqual(averages, expected)
+
+    def test_count(self):
+        date = datetime.date(2014, 9, 1)
+        periods = periodical.periods_ascending(date=date, period='monthly', num_periods=4)
+        dates = [
+            datetime.date(2014, 9, 1),
+            datetime.date(2014, 9, 2),
+            datetime.date(2014, 10, 1),
+            datetime.date(2014, 10, 1),
+            datetime.date(2014, 12, 1),
+        ]
+        counts = periodical.count(periods, dates)
+        expected = collections.OrderedDict([
+            (periodical.CalendarPeriod('2014-09'), 2),
+            (periodical.CalendarPeriod('2014-10'), 2),
+            (periodical.CalendarPeriod('2014-11'), 0),
+            (periodical.CalendarPeriod('2014-12'), 1),
+        ])
+        self.assertEqual(counts, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

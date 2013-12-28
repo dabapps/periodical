@@ -174,9 +174,7 @@ Example code:
 
 ## Aggregation of values
 
-**TODO**
-
-### map(periods, date_value_pairs)
+### map(periods, date_value_pairs, transform=None)
 
      {
          <CalendarPeriod '2014-09'>: [20, 25],
@@ -185,20 +183,29 @@ Example code:
          <CalendarPeriod '2014-12'>: [30]
      }
 
-### sum(periods, date_value_pairs, empty=None)
+### summation(periods, date_value_pairs)
 
      {
          <CalendarPeriod '2014-09'>: 45,
          <CalendarPeriod '2014-10'>: 40,
-         <CalendarPeriod '2014-11'>: None,
+         <CalendarPeriod '2014-11'>: 0,
          <CalendarPeriod '2014-12'>: 30
      }
 
-### average(periods, date_value_pairs, empty=None)
+### average(periods, date_value_pairs)
 
      {
          <CalendarPeriod '2014-09'>: 22.5,
-         <CalendarPeriod '2014-10'>: 20,
+         <CalendarPeriod '2014-10'>: 20.0,
          <CalendarPeriod '2014-11'>: None,
-         <CalendarPeriod '2014-12'>: 30
+         <CalendarPeriod '2014-12'>: 30.0
+     }
+ 
+### count(periods, dates)
+
+     {
+         <CalendarPeriod '2014-09'>: 2,
+         <CalendarPeriod '2014-10'>: 2,
+         <CalendarPeriod '2014-11'>: 0,
+         <CalendarPeriod '2014-12'>: 1
      }
