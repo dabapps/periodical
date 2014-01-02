@@ -6,21 +6,23 @@ The `periodical` Python module provides a convienient way of dealing with time a
 
 These are particular useful for aggregating events at differing time granualities, for example when generating graphs or reports covering a given time span.
 
-You can install the `periodical` module using pip:
-
-    pip install periodical
-
 ---
 
 ## Basic usage
 
+### Installation
+
+You can install the `periodical` module using pip:
+
+    pip install periodical
+
 ### The TimePeriod and DatePeriod classes
 
-The `TimePeriod` class is used to represent an interval of datetimes.
+The `TimePeriod` class is used to represent an interval between two datetimes.  The `DatePeriod` class is used to represent an interval of dates.
 
-The `DatePeriod` class is used to represent an interval of dates.
+You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.
 
-You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.  For  `DatePeriod` this may be one of `'day'`, `'week'`, `'month'`, `'quarter'` or `'year'`.
+For  `DatePeriod` this may be one of `'day'`, `'week'`, `'month'`, `'quarter'` or `'year'`.
 
     >>> import periodical
     >>> period = periodical.DatePeriod(span='week')
