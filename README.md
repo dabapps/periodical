@@ -6,6 +6,46 @@ The `periodical` Python module provides a convienient way of dealing with time a
 
 These are particular useful for aggregating events at differing time granualities, for example when generating graphs or reports covering a given time span.
 
+### An example of using periodical
+
+In this example we have a service which is logging the response times from a web application.  We'd like to generate the average response time for each hourly period over the previous 24 hours.
+
+First we'll get the sequence of the last 24 hour periods.
+
+    >>> import periodical
+    >>> hour_periods = periodical.time_periods_descending(span='hour', num_periods=24)
+    >>> hour_periods
+    [
+        <TimePeriod '2014-04-28T15:00Z'>,
+        <TimePeriod '2014-04-28T14:00Z'>,
+        <TimePeriod '2014-04-28T13:00Z'>,
+        ...
+    ]
+
+Let's assume we have a list of requests in the `request_log` variable.  Let's also assume that each of the request objects has an asociated `started` property, which is a `datetime` representing the time the request was recieved, and a `duration` property, which is a float representing the number of seconds it took to generate and send a response.
+
+In order to work with this data in periodical we need to first transform our objects into a list of two-tuple data points, of the form `(datetime, value)`, like so:
+
+    >>> data_points = [(request.started, request.duration) for request in request_log]
+    >>> data_points
+    [
+        (datetime.datetime(2014, 4, 28, 15, 23, 35, 682504, tzinfo=<UTC>), 0.24),
+        (datetime.datetime(2014, 4, 28, 15, 22, 12, 659191, tzinfo=<UTC>), 0.22),
+        (datetime.datetime(2014, 4, 28, 15, 21, 45, 728530, tzinfo=<UTC>), 0.30),
+        ...
+    ]
+
+Now that we have our data points we can get the average response time within each hour time period.  We use the `periodical.average()` function, which returns an ordered dictionary mapping each time period onto the average value of data points within that period.
+
+    >>> average_response_times = periodical.average(hour_periods, data_points)
+    >>> average_response_times
+    {
+        <TimePeriod '2014-04-28T15:00Z'>: 0.26,
+        <TimePeriod '2014-04-28T14:00Z'>: 0.24,
+        <TimePeriod '2014-04-28T13:00Z'>: 0.35,
+        ...
+    }
+
 ---
 
 ## Basic usage
@@ -181,9 +221,9 @@ Note that the strings returned  by `isoformat()` are not unique in the same way 
 
 The `periodical` module provides functions for returning sequences of time or date periods.  These allow you to easily return ranges such as "the last 24 hours", or "all the weeks since the start of the year".
 
-### time_periods_ascending(time, period, num_periods)
+### time_periods_ascending(time, span, num_periods)
 
-### date_periods_ascending(date, period, num_periods)
+### date_periods_ascending(date, span, num_periods)
 
 Returns a list of `TimePeriod` or `DatePeriod` objects in chronological order, starting with a given time or date.
 
@@ -209,9 +249,9 @@ Example code:
     >>> periodical.date_periods_ascending(span='monthly', num_periods=3)
     [<DatePeriod '2014-11'>, <DatePeriod '2014-12'>, <DatePeriod '2015-01'>]
 
-### time_periods_descending(time, period, num_periods)
+### time_periods_descending(time, span, num_periods)
 
-### date_periods_descending(date, period, num_periods)
+### date_periods_descending(date, span, num_periods)
 
 Returns a list of `TimePeriod` or `DatePeriod` objects in reverse chronological order, starting with a given time or date.
 
