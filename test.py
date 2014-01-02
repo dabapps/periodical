@@ -555,7 +555,7 @@ class TestTimePeriods(unittest.TestCase):
         time = periodical.utc_datetime(2000, 1, 1, 1)
         periods = periodical.time_periods_descending(time, 'hourly', 3)
         iso = [period.isoformat() for period in periods]
-        self.assertEqual(['2000-01-01T01Z', '2000-01-01T00Z', '1999-12-31T23Z'], iso)
+        self.assertEqual(['2000-01-01T01:00Z', '2000-01-01T00:00Z', '1999-12-31T23:00Z'], iso)
 
     def test_daily_series_descending(self):
         time = datetime.datetime(2000, 1, 1)

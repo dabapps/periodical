@@ -439,8 +439,8 @@ class TimePeriod(object):
             raise ValueError("Invalid value for `span` argument '%s'" % span)
 
         if self._span == 'seconds':
-            self._start = time
-            self._end = time + datetime.timedelta(seconds=1, microsecond=0)
+            self._start = time.replace(microsecond=0)
+            self._end = time + datetime.timedelta(seconds=1)
         elif self._span == 'minutes':
             self._start = time.replace(second=0, microsecond=0)
             self._end = time.replace(second=0) + datetime.timedelta(minutes=1)
