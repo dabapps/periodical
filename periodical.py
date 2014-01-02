@@ -33,6 +33,9 @@ class UTC(datetime.tzinfo):
     def dst(self, dt):
         return datetime.timedelta(0)
 
+    def __repr__(self):
+        return '<UTC>'
+
 
 class Offset(datetime.tzinfo):
     """
@@ -55,6 +58,9 @@ class Offset(datetime.tzinfo):
     def dst(self, dt):
         return self._offset
 
+    def __repr__(self):
+        return "<Offset '%s'>" % self._offset_repr
+
 
 def utcnow():
     """
@@ -72,7 +78,7 @@ def utc_datetime(*args, **kwargs):
 
 
 def _strip_hhmmss(time):
-    return time.replace(hour=0, minute=0, second=0)
+    return time.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def _incr_month(month, amount=1):
@@ -434,12 +440,12 @@ class TimePeriod(object):
 
         if self._span == 'seconds':
             self._start = time
-            self._end = time + datetime.timedelta(seconds=1)
+            self._end = time + datetime.timedelta(seconds=1, microsecond=0)
         elif self._span == 'minutes':
-            self._start = time.replace(second=0)
+            self._start = time.replace(second=0, microsecond=0)
             self._end = time.replace(second=0) + datetime.timedelta(minutes=1)
         elif self._span == 'hours':
-            self._start = time.replace(minute=0, second=0)
+            self._start = time.replace(minute=0, second=0, microsecond=0)
             self._end = time.replace(minute=0, second=0) + datetime.timedelta(hours=1)
         elif self._span == 'daily':
             self._start = _strip_hhmmss(time)
@@ -551,12 +557,9 @@ class TimePeriod(object):
         if self.span == 'seconds':
             # YYYY-MM-DDTHH:MM:SS
             ret = self.start.isoformat()[:19]
-        elif self.span == 'minutes':
+        elif self.span in ('hours', 'minutes'):
             # YYYY-MM-DDTHH:MM
             ret = self.start.isoformat()[:16]
-        elif self.span == 'hours':
-            # YYYY-MM-DDTHH
-            ret = self.start.isoformat()[:13]
         elif self.span == 'daily':
             # YYYY-MM-DD
             ret = self.start.isoformat()[:10]
