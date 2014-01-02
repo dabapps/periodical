@@ -370,12 +370,14 @@ A `tzinfo` class for representing the timezone with the given offset.  The offse
 
 Returns a `datetime` instance representing the current time in UTC, with an attached `UTC` timzone instance.
 
-    now = periodical.utcnow()
+    >>> now = periodical.utcnow()
+    >>> now
     datetime.datetime(2014, 1, 30, 13, 39, 13, 515377, tzinfo=<UTC>)
 
 ### utc_datetime(\*args, \*\*kwargs)
 
 Returns a new `datetime` instance representing the given time, with an attached `UTC` timzone instance.
 
-    time = periodical.utc_datetime(2014, 01, 01, 14, 30)
+    >>> time = periodical.utc_datetime(2014, 01, 01, 14, 30)
+    >>> time
     datetime.datetime(2014, 1, 1, 14, 30, tzinfo=<UTC>)
