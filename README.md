@@ -318,41 +318,92 @@ Example code:
 
 ## Aggregation of values
 
-### map(periods, time_value_pairs, transform=None)
+    >>> start = date(2014, 09, 01)
+    >>> periods = periodical.date_periods_ascending(start, num_periods = 4)
+    >>> data_points = [
+        (datetime.date(2014, 9, 1), 20),
+        (datetime.date(2014, 9, 2), 25),
+        (datetime.date(2014, 10, 1), 20),
+        (datetime.date(2014, 10, 1), 20),
+        (datetime.date(2014, 12, 1), 30),
+    ]
 
-     {
-         <DatePeriod '2014-09'>: [20, 25],
-         <DatePeriod '2014-10'>: [20, 20],
-         <DatePeriod '2014-11'>: [],
-         <DatePeriod '2014-12'>: [30]
-     }
+### map(periods, data_points, transform=None)
 
-### summation(periods, time_value_pairs)
+Given a sequence of time periods and a set of events, maps each event into it's containing period.
 
-     {
-         <DatePeriod '2014-09'>: 45,
-         <DatePeriod '2014-10'>: 40,
-         <DatePeriod '2014-11'>: 0,
-         <DatePeriod '2014-12'>: 30
-     }
+* `periods`: A list of DatePeriod or TimePeriod instances.
+* `times_value_pairs`: A list of two-tuples of the form `(date or datetime, value)`.
+* `transform`: If provided, this should be a function that takes a single argument. The function will be applied to the list of values contained in each period in order to generate the output for that period.
 
-### average(periods, time_value_pairs)
+Returns an ordered dictionary that maps each period to a list of the contained values.
 
-     {
-         <DatePeriod '2014-09'>: 22.5,
-         <DatePeriod '2014-10'>: 20.0,
-         <DatePeriod '2014-11'>: None,
-         <DatePeriod '2014-12'>: 30.0
-     }
+     >>> periodical.map(periods, data_points)
+     OrderedDict([
+         (<DatePeriod '2014-09'>, [20, 25]),
+         (<DatePeriod '2014-10'>, [20, 20]),
+         (<DatePeriod '2014-11'>, []),
+         (<DatePeriod '2014-12'>, [30])
+     ])
+
+### summation(periods, data_points, zero=0)
+
+Given a sequence of time periods and a set of data points, produces the sum of data points within each period.
+
+**Arguments**:
+
+* `periods`: A list of DatePeriod or TimePeriod instances.
+* `times_value_pairs`: A list of two-tuples of the form `(date or datetime, value)`.
+* `zero`: The initial value to use for summations.  If using non-integer type you may wish to set this to ensure that zero values in the return result have the same type as non-zero values.  For example, you might set the zero argument to `0.0` or `Decimal('0')`. **(Optional)**
+
+Returns an ordered dictionary that sums the values of the data points contained in each period.
+
+     >>> periodical.summation(periods, data_points)
+     OrderedDict([
+         (<DatePeriod '2014-09'>, 45),
+         (<DatePeriod '2014-10'>, 40),
+         (<DatePeriod '2014-11'>, 0),
+         (<DatePeriod '2014-12'>, 30)
+     ])
+
+### average(periods, data_points)
+
+Given a sequence of time periods and a set of data points, produces the average of data points within each period.
+
+**Arguments**:
+
+* `periods`: A list of DatePeriod or TimePeriod instances.
+* `times_value_pairs`: A list of two-tuples of the form `(date or datetime, value)`.
+
+Returns an ordered dictionary that sums the values of the data points contained in each period.  Periods which do not contain any data points will be mapped to `None`.
+
+     >>> periodical.average(periods, data_points)
+     OrderedDict([
+         (<DatePeriod '2014-09'>, 22.5),
+         (<DatePeriod '2014-10'>, 20.0),
+         (<DatePeriod '2014-11'>, None),
+         (<DatePeriod '2014-12'>, 30.0)
+     ])
  
 ### count(periods, times)
 
-     {
-         <DatePeriod '2014-09'>: 2,
-         <DatePeriod '2014-10'>: 2,
-         <DatePeriod '2014-11'>: 0,
-         <DatePeriod '2014-12'>: 1
-     }
+Counts the number of occurances of an event within each period.
+
+**Arguments**:
+
+* `periods`: A list of DatePeriod or TimePeriod instances.
+* `times`: A list of date or datetime instances.
+
+Returns an ordered dictionary that maps each period to the corresponding count of the number of date or time instances that it contained.
+
+     >>> times = [date for (date, value) in data_points]
+     >>> periodical.count(periods, times)
+     OrderedDict([
+         (<DatePeriod '2014-09'>, 2),
+         (<DatePeriod '2014-10'>, 2),
+         (<DatePeriod '2014-11'>, 0),
+         (<DatePeriod '2014-12'>, 1)
+     ])
 
 ## Timezone utilities
 

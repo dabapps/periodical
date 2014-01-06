@@ -732,14 +732,14 @@ def _next_pair_or_none(iterator):
         return (None, None)
 
 
-def map(periods, date_value_pairs, transform=None):
+def map(periods, data_points, transform=None):
     """
     Given a sequence of dates periods, and a list of date/value pairs,
     map each value to the period containing it's date.
     """
     is_descending = periods and (periods[0] > periods[-1])
     sort_by_date = lambda date_value_pair: date_value_pair[0]
-    date_value_iter = iter(sorted(date_value_pairs, key=sort_by_date, reverse=is_descending))
+    date_value_iter = iter(sorted(data_points, key=sort_by_date, reverse=is_descending))
 
     ret = collections.OrderedDict()
     date, value = _next_pair_or_none(date_value_iter)
@@ -757,13 +757,14 @@ def map(periods, date_value_pairs, transform=None):
     return ret
 
 
-def summation(periods, date_value_pairs):
-    return map(periods, date_value_pairs, transform=sum)
+def summation(periods, data_points, zero=0):
+    sum_from_zero = lambda values: sum(values, zero)
+    return map(periods, data_points, transform=sum_from_zero)
 
 
-def average(periods, date_value_pairs):
+def average(periods, data_points):
     avg = lambda values: float(sum(values)) / len(values) if values else None
-    return map(periods, date_value_pairs, transform=avg)
+    return map(periods, data_points, transform=avg)
 
 
 def count(periods, dates):
