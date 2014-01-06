@@ -68,7 +68,7 @@ The `DatePeriod` class is used to represent an interval of dates.
 
 ### Creating period instances
 
-You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.  By default this will return a period that covers the current time or day.
+You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.  By default this will return a period that covers the current time or day in UTC timezone.
 
 For  `DatePeriod` this may be one of `'day'`, `'week'`, `'month'`, `'quarter'` or `'year'`.
 
@@ -91,6 +91,15 @@ You can also explicitly provide a date or time that you wish the period to cover
     <DatePeriod '2015-W04'>
 
 ### A note on timezones
+
+The default implementations for `DatePeriod` and `TimePeriod` return periods coverring the current date or time *in the UTC timezone*.  To work with local time you'll need to pass the local date or time explicitly.
+
+For example to get the current week period, using local time to determine the current date instead of using UTC time, we would do the following:
+
+    >>> today = datetime.date.today()
+    >>> period = periodical.DatePeriod(date=today, span='week')
+
+#### Timezone awareness and TimePeriod objects
 
 When passing a `datetime` instance to `TimePeriod`, the resulting period instance will use the same timezone info as the provided argument, or be timezone-naive if no timezone info is included.
 
@@ -432,6 +441,14 @@ Returns a `datetime` instance representing the current time in UTC, with an atta
     >>> now = periodical.utcnow()
     >>> now
     datetime.datetime(2014, 1, 30, 13, 39, 13, 515377, tzinfo=<UTC>)
+
+### utctoday()
+
+Returns a `datetime` instance representing the current date within the UTC timezone.
+
+    >>> today = periodical.utctoday()
+    >>> today
+    datetime.date(2014, 1, 30) 
 
 ### utc_datetime(\*args, \*\*kwargs)
 

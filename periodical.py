@@ -62,6 +62,13 @@ class Offset(datetime.tzinfo):
         return "<Offset '%s'>" % self._offset_repr
 
 
+def utctoday():
+    """
+    Returns the current date in the UTC timezone.
+    """
+    return datetime.datetime.utcnow().today()
+
+
 def utcnow():
     """
     As `datetime.datetime.utcnow()`, but returns a timezone aware datetime in UTC.
@@ -213,7 +220,7 @@ class DatePeriod(object):
     which may be one of: daily, weekly, monthly, quarterly, yearly.
     """
     def __init__(self, string_repr=None, date=None, span=None, _start=None, _end=None, _today_func=None):
-        self.today_func = datetime.date.today if _today_func is None else _today_func
+        self.today_func = utctoday if _today_func is None else _today_func
 
         if _start is not None and _end is not None:
             # Created a new DatePeriod with explicit start and end dates,
