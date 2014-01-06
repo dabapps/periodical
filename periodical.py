@@ -5,7 +5,7 @@ import collections
 import datetime
 import re
 
-__version__ = '1.0'
+__version__ = '1.0.1'
 
 
 yearly_re = re.compile('(?P<year>[0-9]+)$')
@@ -66,7 +66,7 @@ def utctoday():
     """
     Returns the current date in the UTC timezone.
     """
-    return datetime.datetime.utcnow().today()
+    return datetime.datetime.utcnow().date()
 
 
 def utcnow():

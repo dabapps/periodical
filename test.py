@@ -236,6 +236,12 @@ class TestDatePeriods(unittest.TestCase):
         self.assertEqual(cal.start, datetime.date(2000, 1, 1))
         self.assertEqual(cal.end, datetime.date(2000, 1, 31))
 
+    def test_default_today(self):
+        # Simply exersize the default `today` implementation
+        period = periodical.DatePeriod(span='yearly')
+        period_repr = str(period)
+        self.assertEqual(len(period_repr), 4)
+
     def test_repr(self):
         date = datetime.date(2000, 1, 1)
         cal = periodical.DatePeriod(date=date, span='monthly')
