@@ -2,7 +2,9 @@
 
 **A library for working with time and date series in Python.**
 
-[![Build Status](https://travis-ci.org/dabapps/periodical.png?branch=master)](https://travis-ci.org/dabapps/periodical) [![Coverage Status](https://coveralls.io/repos/dabapps/periodical/badge.png?branch=master)](https://coveralls.io/r/dabapps/periodical?branch=master) [![PyPI version](https://badge.fury.io/py/periodical.png)](http://badge.fury.io/py/periodical)
+[![Build Status](https://travis-ci.org/dabapps/periodical.png?branch=master)](https://travis-ci.org/dabapps/periodical)
+[![Coverage Status](https://coveralls.io/repos/dabapps/periodical/badge.png?branch=master)](https://coveralls.io/r/dabapps/periodical?branch=master)
+[![PyPI version](https://badge.fury.io/py/periodical.png)](http://badge.fury.io/py/periodical)
 
 The `periodical` Python module provides a convienient way of dealing with time and date series.  
 
