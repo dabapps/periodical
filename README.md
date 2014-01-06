@@ -6,6 +6,16 @@ The `periodical` Python module provides a convienient way of dealing with time a
 
 These are particular useful for aggregating events at differing time granualities, for example when generating graphs or reports covering a given time span.
 
+### Requirements
+
+`periodical` currently supports Python 2.7, 3.2 and 3.3.
+
+### Installation
+
+You can install the `periodical` module using pip:
+
+    pip install periodical
+
 ### An example of using periodical
 
 In this example we have a service which is logging the response times from a web application.  We'd like to generate the average response time for each hourly period over the previous 24 hours.
@@ -48,19 +58,17 @@ Now that we have our data points we can get the average response time within eac
 
 ---
 
-## Basic usage
+## TimePeriod and DatePeriod objects
 
-### Installation
+The two basic building blocks of periodical are the `TimePeriod` and `DatePeriod` classes.
 
-You can install the `periodical` module using pip:
+The `TimePeriod` class is used to represent an interval between two datetimes.
 
-    pip install periodical
+The `DatePeriod` class is used to represent an interval of dates.
 
-### The TimePeriod and DatePeriod classes
+### Creating period instances
 
-The `TimePeriod` class is used to represent an interval between two datetimes.  The `DatePeriod` class is used to represent an interval of dates.
-
-You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.
+You can instantiate a `TimePeriod` or `DatePeriod` object by specifying a time span.  By default this will return a period that covers the current time or day.
 
 For  `DatePeriod` this may be one of `'day'`, `'week'`, `'month'`, `'quarter'` or `'year'`.
 
@@ -108,7 +116,7 @@ You can determine the timezone information in use by examining the suffix of the
     <TimePeriod '2015-01-25T04Z'>       # 25th Jan 2015, 04:00 UTC
     <TimePeriod '2015-01-25T04-05:00'>  # 25th Jan 2015, 04:00 EST
 
-#### Start and end dates
+### Start and end dates
 
 Both objects provide `start` and `end` properties.  For `DatePeriod` objects these return an instance of `date`.
 
@@ -134,7 +142,7 @@ Period objects also provide a `contains()` method that takes a date or time obje
     >>> period.contains(datetime.date(2014, 4, 20))
     False
 
-#### Differences between time and date periods
+### Differences between time and date periods
 
 When considering the end point of a period there is an important distinction to be made between `DatePeriod` and `TimePeriod` objects, due to the fact that dates and times represent fundamentally different concepts.
 
@@ -159,7 +167,7 @@ For example, the date and time periods for the month of November 2014 may be rep
     TimePeriod: start time <= period < end time
 
 
-#### Iterating through periods
+### Iterating through periods
 
 To return a new `TimePeriod` or `DatePeriod` object that occurs immediately before or after the existing period, you can call the `.next()` and `.previous()` methods.
 
@@ -169,7 +177,7 @@ To return a new `TimePeriod` or `DatePeriod` object that occurs immediately befo
     >>> period.previous()
     <DatePeriod '2013-W52'>
 
-#### String representations
+### String representations
 
 DatePeriod objects use a unique representation that follows ISO 8601 with the following exceptions:
 
@@ -217,7 +225,7 @@ Note that the strings returned  by `isoformat()` are not unique in the same way 
 
 ---
 
-## Working with sequences of periods
+## Sequences of periods
 
 The `periodical` module provides functions for returning sequences of time or date periods.  These allow you to easily return ranges such as "the last 24 hours", or "all the weeks since the start of the year".
 
