@@ -327,6 +327,12 @@ Example code:
 
 ## Aggregation of values
 
+For the following documentation we're going to need a set of data points that we're interested in aggregating, in order to demonstate how the different aggregation functions work.
+
+We'll also need a set of periods that we're interested in aggregating the data against.
+
+Our initial data looks like this:
+
     >>> start = date(2014, 09, 01)
     >>> periods = periodical.date_periods_ascending(start, num_periods = 4)
     >>> data_points = [
@@ -334,7 +340,7 @@ Example code:
         (datetime.date(2014, 9, 2), 25),
         (datetime.date(2014, 10, 1), 20),
         (datetime.date(2014, 10, 1), 20),
-        (datetime.date(2014, 12, 1), 30),
+        (datetime.date(2014, 12, 1), 30)
     ]
 
 ### map(periods, data_points, transform=None)
