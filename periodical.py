@@ -5,7 +5,7 @@ import collections
 import datetime
 import re
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 
 yearly_re = re.compile('(?P<year>[0-9]+)$')
