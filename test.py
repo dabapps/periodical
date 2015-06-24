@@ -253,6 +253,16 @@ class TestDatePeriods(unittest.TestCase):
         with self.assertRaises(ValueError):
             periodical.DatePeriod(date=date, span='blibble')
 
+    def test_invalid_date_period_comparison(self):
+        date = datetime.date(2000, 1, 1)
+        period = periodical.DatePeriod(date=date, span='day')
+        self.assertFalse(period == 5)
+
+    def test_invalid_time_period_comparison(self):
+        time = datetime.datetime(2000, 1, 1, 0, 0, 0)
+        period = periodical.TimePeriod(time=time, span='day')
+        self.assertFalse(period == 5)
+
     def test_unknown_representation(self):
         with self.assertRaises(ValueError):
             periodical.DatePeriod('199x')
