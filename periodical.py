@@ -399,6 +399,8 @@ class DatePeriod(object):
         return self.start > other.end
 
     def __eq__(self, other):
+        if type(self) is not type(other):
+            return False
         return self.start == other.start and self.end == other.end
 
 
@@ -628,6 +630,8 @@ class TimePeriod(object):
         return self.start >= other.end
 
     def __eq__(self, other):
+        if type(self) is not type(other):
+            return False
         return self.start == other.start and self.end == other.end
 
 
